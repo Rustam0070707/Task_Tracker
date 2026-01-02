@@ -1,6 +1,6 @@
 package com.pm;
 
-public enum status {
+public enum TaskStatus {
     todo,
     inProgress,
     done

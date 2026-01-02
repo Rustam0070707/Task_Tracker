@@ -3,18 +3,31 @@ package com.pm;
 import java.time.LocalDate;
 
 public class Task {
-   private Integer  Id;
+   private Integer  id;
    private String description ;
-   private  status status;
+
+   private  TaskStatus status;
    private LocalDate createdAt;
    private LocalDate updatedAt;
 
+    public Task( Integer id, String description) {
+    createdAt = LocalDate.now();
+    updatedAt = LocalDate.now();
+    this.status = TaskStatus.todo;
+        this.description = description;
+        this.id = id;
+    }
+
+    public Task() {
+
+    }
+
     public Integer getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Integer id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getDescription() {
@@ -25,11 +38,11 @@ public class Task {
         this.description = description;
     }
 
-    public status getStatus() {
+    public TaskStatus getStatus() {
         return status;
     }
 
-    public void setStatus(status status) {
+    public void setStatus(TaskStatus status) {
         this.status = status;
     }
 
