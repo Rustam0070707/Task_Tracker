@@ -2,6 +2,8 @@
 
 A simple command-line Task Manager written in pure Java, built and compiled using Maven. The application allows users to manage tasks via terminal commands and stores data in a local JSON file.
 
+Inspired by [roadmap.sh/projects/task-tracker](https://roadmap.sh/projects/task-tracker).
+
 ## Table of Contents
 
 - [Features](#features)
