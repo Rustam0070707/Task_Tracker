@@ -8,7 +8,7 @@ import java.util.List;
 
 public class TaskRepository {
 
-    private Path path = Path.of("Tasks.json");
+    private final Path path = Path.of("Tasks.json");
 
     public List<Task> loadTasks() {
         if (!Files.exists(path)) {
@@ -38,5 +38,6 @@ public class TaskRepository {
 
 
     }
+
 
 }

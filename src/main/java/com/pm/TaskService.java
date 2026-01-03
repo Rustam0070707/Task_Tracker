@@ -12,7 +12,7 @@ public class TaskService {
     }
 
     public void list(String filter) {
-        System.out.println("sucess");
+
         List<Task> tasks = repo.loadTasks();
         for (Task task : tasks) {
             if (filter == null || task.getStatus().name().equals(filter)) {
@@ -20,18 +20,43 @@ public class TaskService {
             }
         }
     }
-        public void mark( Integer id,TaskStatus status){
+
+    public void mark(Integer id, TaskStatus status) {
         List<Task> tasks = repo.loadTasks();
 
-        for (Task task : tasks){
-            if(id == task.getId())
-            {
+        for (Task task : tasks) {
+            if (id == task.getId()) {
                 task.setStatus(status);
+                repo.saveTask(tasks);
+                System.out.println("Successfully updated");
+                return;
+            }
+        }
+        System.out.println("Task not found");
+    }
+
+    public void delete(Integer id) {
+        List<Task> tasks = repo.loadTasks();
+        for (Task task : tasks) {
+            if (task.getId() == id) {
+                tasks.remove(task);
+                repo.saveTask(tasks);
+                System.out.println("Successfully deleted");
+                return;
+            }
+        }
+        System.out.println("Task not found");
+    }
+
+    public void update(Integer id, String description) {
+        List<Task> tasks = repo.loadTasks();
+        for (Task task : tasks) {
+            if (task.getId() == id) {
+                task.setDescription(description);
                 repo.saveTask(tasks);
                 System.out.println("Successfully updated");
             }
         }
-            System.out.println("Task not found");;
     }
 }
 

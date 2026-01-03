@@ -35,6 +35,7 @@ public class Task {
     }
 
     public void setDescription(String description) {
+        System.out.println(description);
         this.description = description;
     }
 
