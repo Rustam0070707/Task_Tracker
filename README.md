@@ -1,155 +1,172 @@
-📝 Java CLI Task Manager (Maven)
+# Java CLI Task Manager
 
-A simple command-line Task Manager written in pure Java, built and compiled using Maven.
-The application allows users to manage tasks via terminal commands and stores data in a local JSON file.
+A simple command-line Task Manager written in pure Java, built and compiled using Maven. The application allows users to manage tasks via terminal commands and stores data in a local JSON file.
 
-This project demonstrates:
+## Table of Contents
 
-Java OOP fundamentals
+- [Features](#features)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Build](#build)
+- [Usage](#usage)
+  - [Add a task](#add-a-task)
+  - [List all tasks](#list-all-tasks)
+  - [List tasks by status](#list-tasks-by-status)
+  - [Update a task](#update-a-task)
+  - [Mark task as done](#mark-task-as-done)
+  - [Mark task as in progress](#mark-task-as-in-progress)
+  - [Delete a task](#delete-a-task)
+- [Package as JAR](#package-as-jar)
+- [Data Storage](#data-storage)
+- [Architecture Overview](#architecture-overview)
+- [Known Limitations](#known-limitations)
+- [Contributing](#contributing)
+- [License](#license)
 
-Maven project structure & build lifecycle
+## Features
 
-Command-line argument handling
+- Add tasks
+- List all tasks
+- Filter tasks by status
+- Update task description
+- Mark tasks as done or in progress
+- Delete tasks
+- Persist tasks in a local JSON file (`Tasks.json`)
 
-File I/O using Java NIO
+## Getting Started
 
-Manual JSON serialization/deserialization
+### Prerequisites
 
-Layered architecture (CLI → Service → Repository)
+- Java 17 or higher
+- Apache Maven 3.8+
 
-📂 Project Structure (Maven)
-task-manager/
-├── pom.xml
-└── src
-    └── main
-        └── java
-            └── com
-                └── pm
-                    ├── Main.java
-                    ├── Task.java
-                    ├── TaskStatus.java
-                    ├── TaskService.java
-                    ├── TaskRepository.java
-                    └── JsonUtil.java
-
-
-Package name: com.pm
-
-Entry point: com.pm.Main
-
-⚙️ Features
-
-Add tasks
-
-List all tasks
-
-Filter tasks by status
-
-Update task description
-
-Mark tasks as done or in progress
-
-Delete tasks
-
-Persist tasks in a local JSON file (Tasks.json)
-
-🧰 Requirements
-
-Java 17 or higher
-
-Apache Maven 3.8+
-
-Verify:
+You can verify your installation by running:
 
 ```bash
 java -version
-```
-```bash
 mvn -version
 ```
 
-🔨 Build & Compile (Maven)
+### Installation
 
-From the project root:
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   ```
+2. Navigate to the project directory:
+   ```bash
+   cd Task_Tracker
+   ```
+
+### Build
+
+Compile the project from the root directory:
 
 ```bash
 mvn clean compile
 ```
 
+This will generate the compiled `.class` files in the `target/classes` directory.
 
-This compiles the project and generates .class files in:
+## Usage
 
-target/classes
+The application is run using the `exec-maven-plugin`.
 
-▶️ Run the Application (Maven)
+### Add a task
 
-The project uses exec-maven-plugin to run the CLI.
-
-➕ Add a task
 ```bash
-mvn exec:java -Dexec.args="add Buy milk"
+mvn exec:java -Dexec.args="add <task_description>"
+```
+**Example:**
+```bash
+mvn exec:java -Dexec.args="add 'Buy milk'"
 ```
 
-📃 List all tasks
+### List all tasks
+
 ```bash
 mvn exec:java -Dexec.args="list"
 ```
 
-📃 List tasks by status
+### List tasks by status
+
+```bash
+mvn exec:java -Dexec.args="list <status>"
+```
+**Available statuses:** `todo`, `inProgress`, `done`
+
+**Example:**
 ```bash
 mvn exec:java -Dexec.args="list todo"
 ```
+
+### Update a task
+
 ```bash
-mvn exec:java -Dexec.args="list inProgress"
+mvn exec:java -Dexec.args="update <task_id> <new_description>"
 ```
+**Example:**
 ```bash
-mvn exec:java -Dexec.args="list done"
+mvn exec:java -Dexec.args="update 2 'Buy bread and milk'"
 ```
 
-✏️ Update a task
-```bash
-mvn exec:java -Dexec.args="update 2 Buy bread and milk"
-```
+### Mark task as done
 
-✅ Mark task as done
+```bash
+mvn exec:java -Dexec.args="mark-done <task_id>"
+```
+**Example:**
 ```bash
 mvn exec:java -Dexec.args="mark-done 2"
 ```
 
-⏳ Mark task as in progress
+### Mark task as in progress
+
+```bash
+mvn exec:java -Dexec.args="mark-in-progress <task_id>"
+```
+**Example:**
 ```bash
 mvn exec:java -Dexec.args="mark-in-progress 2"
 ```
 
-❌ Delete a task
+### Delete a task
+
+```bash
+mvn exec:java -Dexec.args="delete <task_id>"
+```
+**Example:**
 ```bash
 mvn exec:java -Dexec.args="delete 2"
 ```
 
-📦 Package as JAR
+## Package as JAR
+
+You can package the application as a runnable JAR file:
+
 ```bash
 mvn clean package
 ```
 
+The generated JAR file will be located at `target/task-manager-1.0.0.jar`.
 
-Generated file:
-
-target/task-manager-1.0.0.jar
-
-
-Run the JAR:
+You can run the JAR file directly:
 
 ```bash
-java -jar target/task-manager-1.0.0.jar add Buy milk
+java -jar target/task-manager-1.0.0.jar <command> <args>
+```
+**Example:**
+```bash
+java -jar target/task-manager-1.0.0.jar add 'Buy milk'
 ```
 
-🗂 Data Storage
+## Data Storage
 
-Tasks are stored locally in:
+Tasks are stored locally in a `Tasks.json` file in the project's root directory.
 
-Tasks.json
-
-Example:
+**Example:**
+```json
 [
   {
     "id": 1,
@@ -159,58 +176,27 @@ Example:
     "updatedAt": "2026-01-03"
   }
 ]
+```
 
-🧠 Architecture Overview
-Main
+## Architecture Overview
 
-Entry point
+- **Main**: Entry point, parses CLI arguments, and delegates commands to `TaskService`.
+- **TaskService**: Business logic layer, handles task operations.
+- **TaskRepository**: Reads/writes tasks from/to the `Tasks.json` file using Java NIO.
+- **JsonUtil**: Handles manual JSON parsing and generation.
+- **Task**: The domain model for a task.
 
-Parses CLI arguments
+## Known Limitations
 
-Delegates commands to TaskService
+- Manual JSON parsing (not production-ready).
+- No concurrency support.
+- Task IDs are sequential and not reused after deletion.
+- No validation for malformed JSON.
 
-TaskService
+## Contributing
 
-Business logic layer
+Contributions are welcome! Please feel free to submit a pull request.
 
-Handles task operations
+## License
 
-TaskRepository
-
-Reads/writes tasks from/to file
-
-Uses Java NIO (Files, Path)
-
-JsonUtil
-
-Manual JSON parsing & generation
-
-No external libraries used
-
-Task
-
-Domain model
-
-Stores task data and timestamps
-
-⚠️ Known Limitations
-
-Manual JSON parsing (not production-ready)
-
-No concurrency support
-
-Task IDs are sequential
-
-No validation for malformed JSON
-
-🎯 Purpose
-
-This project is intended for:
-
-Java fundamentals practice
-
-Learning Maven basics
-
-CLI application development
-
-Interview preparation (Java + Maven + OOP + File I/O)
+This project is licensed under the MIT License.
